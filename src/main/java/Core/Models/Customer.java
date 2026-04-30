@@ -62,7 +62,6 @@ public class Customer {
         this.ticketsBought.remove(ticketId);
     }
 
-
     @Override
     public int hashCode(){
         return Objects.hash(id, username, email, dateOfBirth, ticketsBought);

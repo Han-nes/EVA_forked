@@ -23,6 +23,15 @@ public class Ticket {
         this.eventId = eventId;
     }
 
+    public Ticket(
+            Ticket ticket
+    ) {
+        this.id = ticket.getId();
+        this.dateOfPurchase = ticket.dateOfPurchase;
+        this.customerId = ticket.getCustomerId();
+        this.eventId = ticket.getEventId();
+    }
+
     public UUID getId() {
         return id;
     }
