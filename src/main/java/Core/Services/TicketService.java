@@ -4,14 +4,14 @@ import Core.Models.exceptions.CustomerException;
 import Core.Models.exceptions.EventException;
 import Core.Models.exceptions.TicketException;
 import Core.Interfaces.TicketServiceInterface;
-
+import java.util.concurrent.ConcurrentHashMap;
 import java.time.LocalDate;
 import java.util.*;
 import Core.Models.Ticket;
 
 public class TicketService implements TicketServiceInterface {
 
-    private final Map<UUID, Ticket> ticketsById = new HashMap<>();
+    private final Map<UUID, Ticket> ticketsById = new ConcurrentHashMap<>();
     private CustomerService customerService;
     private EventService eventService;
 

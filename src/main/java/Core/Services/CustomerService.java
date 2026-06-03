@@ -4,12 +4,13 @@ import Core.Models.exceptions.CustomerException;
 import Core.Interfaces.CustomerServiceInterface;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import Core.Models.Customer;
 import Core.Models.Ticket;
 
 public class CustomerService implements CustomerServiceInterface {
 
-    private final Map<UUID, Customer> customersById = new HashMap<>();
+    private final Map<UUID, Customer> customersById = new ConcurrentHashMap<>();
     private final TicketService ticketService;
 
     public CustomerService(TicketService ticketService) {
