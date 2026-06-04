@@ -124,4 +124,14 @@ public class EventService implements EventServiceInterface {
         clonedEvent.getTicketsSold().addAll(event.getTicketsSold());
         return clonedEvent;
     }
+
+    public Map<UUID, Integer> getTicketsSoldPerEvent() {
+    Map<UUID, Integer> result = new ConcurrentHashMap<>();
+
+    for (Event event : eventsById.values()) {
+        result.put(event.getId(), event.getTicketsSold().size());
+    }
+
+    return result;
+}
 }

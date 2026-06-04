@@ -4,8 +4,12 @@ import Core.Models.exceptions.TicketException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import Core.Models.Customer;
 import Core.Models.Event;
@@ -34,8 +38,16 @@ public class PerformanceClient {
     }
 
     public void run() {
-        System.out.println("Test consecutive");
+
         testConsecutive();
+
+        //testParalell();
+
+        for (Event event : eventService.getAllEvents()) {
+            System.out.println(
+                event.getId() + " -> " + event.getTicketsSold().size()
+            );
+}
 
     }
 
@@ -83,6 +95,25 @@ public class PerformanceClient {
         );
     }
 
+    private void testParalell() {
+        long startTime = System.currentTimeMillis();
+        List<Event> events = createEvents(amountEventsToBeCreated);
+        long endTime = System.currentTimeMillis();
+        System.out.println("Time to create " + amountEventsToBeCreated + " events: " + (endTime - startTime) + "ms");
+
+        startTime = System.currentTimeMillis();
+        List<Customer> customers = createCustomers(amountCustomersToBeCreated);
+        endTime = System.currentTimeMillis();
+        System.out.println("Time to create " + amountCustomersToBeCreated + " customers: " + (endTime - startTime) + "ms");
+
+        startTime = System.currentTimeMillis();
+        buyTicketsParallel(events, customers);
+        endTime = System.currentTimeMillis();
+        System.out.println(
+            "Time to buy tickets: " + (endTime - startTime) + "ms"
+        );
+    }
+
     private List<Event> createEvents(int amount) {
         List<Event> events = new ArrayList<>();
         for (int i = 0; i < amount; i++) {
@@ -90,7 +121,7 @@ public class PerformanceClient {
                 "Event" + i,
                 "Location" + i,
                 LocalDateTime.now().plusDays(7 + i),
-                1000
+                10
             );
             events.add(new_event);
         }
@@ -127,5 +158,48 @@ public class PerformanceClient {
         }
         return tickets;
     }
+
+
+    private List<Ticket> buyTicketsParallel(List<Event> events, List<Customer> customers) {
+    int threads = Runtime.getRuntime().availableProcessors();
+    ExecutorService executor = Executors.newFixedThreadPool(threads);
+
+    List<Ticket> result = Collections.synchronizedList(new ArrayList<>());
+
+    int chunkSize = customers.size() / threads;
+    List<Thread> threadList = new ArrayList<>();
+
+    for (int t = 0; t < threads; t++) {
+        int start = t * chunkSize;
+        int end = (t == threads - 1) ? customers.size() : (t + 1) * chunkSize;
+        List<Customer> subCustomers = customers.subList(start, end);
+
+        Thread thread = new Thread(() -> {
+            for (Event event : events) {
+                for (Customer customer : subCustomers) {
+                    try {
+                        result.add(ticketService.createTicket(customer.getId(), event.getId()));
+                    } catch (TicketException e) {
+                        break;
+                    }
+                }
+            }
+        });
+
+        threadList.add(thread);
+        thread.start();
+    }
+
+    for (Thread thread : threadList) {
+        try {
+            thread.join();  // wartet bis jeder Thread fertig ist
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    executor.shutdown();
+    return result;
+}
 
 }

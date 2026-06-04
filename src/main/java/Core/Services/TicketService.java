@@ -8,13 +8,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.time.LocalDate;
 import java.util.*;
 import Core.Models.Ticket;
+import Core.Models.Event;
 
 public class TicketService implements TicketServiceInterface {
 
     private final Map<UUID, Ticket> ticketsById = new ConcurrentHashMap<>();
     private CustomerService customerService;
     private EventService eventService;
-
+    private final ConcurrentHashMap<UUID, Object> eventLocks = new ConcurrentHashMap<>();
     public void setCustomerService(CustomerService customerService){
         this.customerService = customerService;
     }
@@ -22,7 +23,7 @@ public class TicketService implements TicketServiceInterface {
     public void setEventService(EventService eventService){
         this.eventService = eventService;
     }
-
+    /* 
     @Override
     public Ticket createTicket(UUID customerId, UUID eventId) throws TicketException, EventException, CustomerException {
         Ticket newTicket = new Ticket(
@@ -35,6 +36,24 @@ public class TicketService implements TicketServiceInterface {
         saveTicket(newTicket);
         return newTicket;
     }
+    */
+    @Override
+    public Ticket createTicket(UUID customerId, UUID eventId) throws TicketException, EventException, CustomerException {
+        Object lock = eventLocks.computeIfAbsent(eventId, k -> new Object());
+        
+        synchronized (lock) {
+            Ticket newTicket = new Ticket(
+                UUID.randomUUID(),
+                LocalDate.now(),
+                customerId,
+                eventId
+            );
+            validateTicket(newTicket);
+            saveTicket(newTicket);
+            return newTicket;
+        }
+    }
+
 
     private void saveTicket(Ticket ticket){
         ticketsById.put(ticket.getId(), new Ticket(ticket));
