@@ -1,28 +1,32 @@
 package services;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
-import Core.Models.exceptions.EventException;
-import Core.Models.Event;
-import Core.Services.EventService;
-import Core.Services.TicketService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-class EventServiceTest {
+import core.models.Event;
+import core.models.exceptions.EventException;
+import core.services.EventService;
+import core.services.TicketService;
+import idgenerator.idservice.IDService;
 
+class EventServiceTest {
+    private final IDService idService = new IDService(10000L, 99999L);
     private EventService eventService;
     private Event testEvent;
 
     @BeforeEach
     void setUp() {
-        this.eventService = new EventService(new TicketService());
+        this.eventService = new EventService(new TicketService(idService), idService);
     }
 
     @Nested
@@ -52,7 +56,7 @@ class EventServiceTest {
             assertEquals(name, event.getName());
             assertEquals(location, event.getLocation());
             assertEquals(time, event.getTime());
-            assertEquals(ticketsAvailable, event.getTicketsAvailable().get());
+            assertEquals(ticketsAvailable, event.getTicketsAvailable());
         }
 
         @Test
@@ -75,7 +79,29 @@ class EventServiceTest {
 
             // Assert
             assertNotNull(event);
-            assertEquals(0, event.getTicketsAvailable().get());
+            assertEquals(0, event.getTicketsAvailable());
+        }
+
+        @Test
+        @DisplayName("Shouldn't be able to change Event with Create-Reference")
+        void shouldNotBeAbleToChangeEventWithCreate(){
+            final String location = "test@mail.de";
+            final String name = "richtiger Name";
+            final LocalDateTime time = LocalDateTime.now().plusDays(5);
+            final int ticketsAvailable = 100;
+
+            //Arrange
+            Event event = eventService.createEvent(name, location, time, ticketsAvailable);
+            event.setLocation("falsche@mail.de");
+            event.setName("falscher Name");
+            event.setTime(LocalDateTime.now().plusDays(10));
+            event.setTicketsAvailable(1000);
+
+            //Assert
+            assertEquals(location, eventService.getEventById(event.getId()).getLocation());
+            assertEquals(name, eventService.getEventById(event.getId()).getName());
+            assertEquals(time, eventService.getEventById(event.getId()).getTime());
+            assertEquals(ticketsAvailable, eventService.getEventById(event.getId()).getTicketsAvailable());
         }
     }
 
@@ -109,7 +135,7 @@ class EventServiceTest {
         @DisplayName("Should return Null for non-existent event ID")
         void shouldReturnNullForNonExistentEventId() {
             // Arrange
-            UUID nonExistentId = UUID.randomUUID();
+            long nonExistentId = -1;
 
             //Act and Assert
             assertThrows(
@@ -300,7 +326,7 @@ class EventServiceTest {
         @DisplayName("Shouldn't be able to Insert Ticket via Update")
         void shouldNotInsertTicketViaUpdate(){
             // Arrange
-            Event newEvent = new Event(UUID.randomUUID(), "testEvent" , "testLocation", LocalDateTime.now(), 100);
+            Event newEvent = new Event(idService.getUnusedId(), "testEvent" , "testLocation", LocalDateTime.now(), 100);
 
             // Act
 
