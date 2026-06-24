@@ -1,23 +1,19 @@
 package services;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+import core.models.exceptions.EventException;
+import core.models.Event;
+import core.services.EventService;
+import core.services.TicketService;
+import idGenerator.idService.IDService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-
-import core.models.Event;
-import core.models.exceptions.EventException;
-import core.services.EventService;
-import core.services.TicketService;
-import idgenerator.idservice.IDService;
 
 class EventServiceTest {
     private final IDService idService = new IDService(10000L, 99999L);

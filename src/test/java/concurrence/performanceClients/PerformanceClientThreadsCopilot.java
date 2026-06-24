@@ -1,5 +1,14 @@
 package concurrence.performanceClients;
 
+import concurrence.performanceTests.ThreadingCorrectnessTest;
+import core.models.Customer;
+import core.models.Event;
+import core.models.Ticket;
+import core.services.CustomerService;
+import core.services.EventService;
+import core.services.TicketService;
+import idGenerator.idService.IDServiceInterface;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -8,15 +17,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
-
-import concurrence.performancetests.ThreadingCorrectnessTest;
-import core.models.Customer;
-import core.models.Event;
-import core.models.Ticket;
-import core.services.CustomerService;
-import core.services.EventService;
-import core.services.TicketService;
-import idgenerator.idservice.IDServiceInterface;
 
 /**
  * Erzeugt Testdaten in drei Phasen:

@@ -8,7 +8,7 @@ import core.models.Event;
 import core.services.CustomerService;
 import core.services.EventService;
 import core.services.TicketService;
-import idgenerator.idservice.IDService;
+import idGenerator.idService.IDService;
 import tcp.client.ticketShop.TicketShopStringFormatter;
 
 public class RequestHandler {
@@ -17,13 +17,10 @@ public class RequestHandler {
     private final CustomerService customerService;
     private final TicketService ticketService;
 
-    public RequestHandler() {
-        IDService idService = new IDService(10000L, 99999L);
-        this.ticketService = new TicketService(idService);
-        this.customerService = new CustomerService(ticketService, idService);
-        this.eventService = new EventService(ticketService, idService);
-        ticketService.setCustomerService(customerService);
-        ticketService.setEventService(eventService);
+    public RequestHandler(TicketService ticketService, CustomerService customerService, EventService eventService) {
+        this.ticketService = ticketService;
+        this.customerService = customerService;
+        this.eventService = eventService;
     }
 
     public String callMethodRemotely(String string) throws Exception {

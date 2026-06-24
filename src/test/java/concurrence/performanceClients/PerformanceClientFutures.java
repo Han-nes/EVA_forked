@@ -1,5 +1,7 @@
 package concurrence.performanceClients;
 
+import concurrence.performanceTests.ThreadingCorrectnessTest;
+import core.models.exceptions.TicketException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -9,16 +11,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
-
-import concurrence.performancetests.ThreadingCorrectnessTest;
 import core.models.Customer;
 import core.models.Event;
 import core.models.Ticket;
-import core.models.exceptions.TicketException;
 import core.services.CustomerService;
 import core.services.EventService;
 import core.services.TicketService;
-import idgenerator.idservice.IDServiceInterface;
+import idGenerator.idService.IDServiceInterface;
 
 public class PerformanceClientFutures {
 

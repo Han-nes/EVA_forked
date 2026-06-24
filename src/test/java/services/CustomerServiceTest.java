@@ -1,24 +1,19 @@
 package services;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
 import java.util.List;
 
+import core.models.exceptions.CustomerException;
+import core.models.Customer;
+import core.services.CustomerService;
+import core.services.TicketService;
+import idGenerator.idService.IDService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-
-import core.models.Customer;
-import core.models.exceptions.CustomerException;
-import core.services.CustomerService;
-import core.services.TicketService;
-import idgenerator.idservice.IDService;
 
 class CustomerServiceTest {
 

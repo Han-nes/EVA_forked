@@ -1,5 +1,9 @@
 package tcp.server;
 
+import core.services.CustomerService;
+import core.services.EventService;
+import core.services.TicketService;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -7,41 +11,50 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 public class ClientHandler implements Runnable {
+
     private final Socket socket;
     private final RequestHandler requestHandler;
 
-    public ClientHandler(Socket socket , RequestHandler handler) {
+
+
+
+    public ClientHandler(Socket socket, TicketService ticketService, CustomerService customerService, EventService eventService) {
         this.socket = socket;
-        this.requestHandler = handler; // würde hier auch ein handler reichen, statt für jeden Client eine neue Instanz zu erstellen?
+        this.requestHandler = new RequestHandler(ticketService, customerService, eventService);
     }
 
     @Override
     public void run() {
         try (
             BufferedReader in = new BufferedReader(
-                new InputStreamReader(socket.getInputStream()));
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true)
+                new InputStreamReader(socket.getInputStream())
+            );
+            PrintWriter out = new PrintWriter(
+                socket.getOutputStream(),
+                true
+            )
         ) {
+            // Handle client communication here
             String line;
             while ((line = in.readLine()) != null) {
-                System.out.println("Empfangen: " + line);
-                try{
-                String response = requestHandler.callMethodRemotely(line);
-                out.println(response);
+                System.out.println(
+                    "Received message from client " +
+                    socket.getRemoteSocketAddress() +
+                    ": " +
+                    line
+                );
+                String answer;
+                try {
+                    answer = requestHandler.callMethodRemotely(line);
+                } catch (Exception e) {
+                    answer = e.getMessage();
                 }
-            catch (Exception e) {
-                System.err.println(e.getMessage());
-                out.println("Error: " + e.getMessage()); // ← Antwort zurückschicken!
-            }
+                out.println(answer);
             }
         } catch (IOException e) {
-            System.err.println("Client-Fehler: " + e.getMessage());
-        } finally {
-            try {
-                socket.close();
-            } catch (IOException e) {
-                System.err.println("Fehler beim Schließen: " + e.getMessage());
-            }
+            System.err.println(
+                "Caught IOException on client communication: " + e
+            );
         }
     }
 }

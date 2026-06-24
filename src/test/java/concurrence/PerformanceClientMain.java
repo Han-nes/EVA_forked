@@ -1,10 +1,10 @@
 package concurrence;
 
+import idGenerator.idService.IDService;
+import idGenerator.idService.IDServiceParallel;
 import concurrence.performanceClients.PerformanceClientFutures;
 import concurrence.performanceClients.PerformanceClientThreads;
 import concurrence.performanceClients.PerformanceClientThreadsCopilot;
-import idgenerator.idservice.IDService;
-import idgenerator.idservice.IDServiceParallel;
 
 public class PerformanceClientMain {
     public static void main(String[] args) {

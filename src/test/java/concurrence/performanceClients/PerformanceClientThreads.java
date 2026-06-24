@@ -1,19 +1,19 @@
 package concurrence.performanceClients;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
-import concurrence.performancetests.ThreadingCorrectnessTest;
+import concurrence.performanceTests.ThreadingCorrectnessTest;
 import core.models.Customer;
 import core.models.Event;
 import core.models.exceptions.TicketException;
 import core.services.CustomerService;
 import core.services.EventService;
 import core.services.TicketService;
-import idgenerator.idservice.IDServiceInterface;
+import idGenerator.idService.IDServiceInterface;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class PerformanceClientThreads {
 

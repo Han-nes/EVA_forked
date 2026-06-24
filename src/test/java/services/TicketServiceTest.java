@@ -1,32 +1,25 @@
 package services;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
+import core.models.exceptions.CustomerException;
+import core.models.exceptions.EventException;
+import core.models.exceptions.TicketException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import core.models.Customer;
+import core.models.Event;
+import core.models.Ticket;
+import core.services.CustomerService;
+import core.services.EventService;
+import core.services.TicketService;
+import idGenerator.idService.IDService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-
-import core.models.Customer;
-import core.models.Event;
-import core.models.Ticket;
-import core.models.exceptions.CustomerException;
-import core.models.exceptions.EventException;
-import core.models.exceptions.TicketException;
-import core.services.CustomerService;
-import core.services.EventService;
-import core.services.TicketService;
-import idgenerator.idservice.IDService;
 
 class TicketServiceTest {
 
