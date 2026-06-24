@@ -3,7 +3,7 @@ package tcp.server;
 import core.services.CustomerService;
 import core.services.EventService;
 import core.services.TicketService;
-import idGenerator.idService.IDService;
+import idgenerator.idservice.IDService;
 
 import java.io.IOException;
 import java.net.ServerSocket;

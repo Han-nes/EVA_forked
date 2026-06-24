@@ -1,8 +1,8 @@
 package rest.client;
 
-import core.clients.commandHandler.ConsoleClientCustomerCommandHandler;
-import core.clients.commandHandler.ConsoleClientEventCommandHandler;
-import core.clients.commandHandler.ConsoleClientTicketCommandHandler;
+import core.clients.commandhandler.ConsoleClientCustomerCommandHandler;
+import core.clients.commandhandler.ConsoleClientEventCommandHandler;
+import core.clients.commandhandler.ConsoleClientTicketCommandHandler;
 import core.interfaces.TicketShopInterface;
 
 import java.net.http.HttpClient;

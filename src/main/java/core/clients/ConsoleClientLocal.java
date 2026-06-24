@@ -1,14 +1,14 @@
-package tcp.client;
+package core.clients;
 
 import core.clients.commandhandler.ConsoleClientCustomerCommandHandler;
 import core.clients.commandhandler.ConsoleClientEventCommandHandler;
 import core.clients.commandhandler.ConsoleClientTicketCommandHandler;
 import core.interfaces.TicketShopInterface;
-import tcp.client.ticketshop.TCPTicketShop;
 
 import java.util.Scanner;
+import core.ticketshop.LocalTicketShop;
 
-public class ConsoleClientTcp {
+public class ConsoleClientLocal {
 
     private final Scanner scanner;
 
@@ -16,10 +16,9 @@ public class ConsoleClientTcp {
     private final ConsoleClientTicketCommandHandler ticketCommandHandler;
     private final ConsoleClientCustomerCommandHandler customerCommandHandler;
 
-    public ConsoleClientTcp() {
+    public ConsoleClientLocal() {
         this.scanner = new Scanner(System.in);
-        TcpClient tcpClient = new TcpClient("127.0.0.1", 12345);
-        TicketShopInterface shop = new TCPTicketShop(tcpClient);
+        TicketShopInterface shop = new LocalTicketShop();
 
         this.customerCommandHandler = new ConsoleClientCustomerCommandHandler(shop);
         this.eventCommandHandler = new ConsoleClientEventCommandHandler(shop);
@@ -27,9 +26,9 @@ public class ConsoleClientTcp {
     }
 
     public void start() {
-        System.out.println("=== Welcome to the TCP-Ticket-shop ===");
+        System.out.println("=== Welcome to the Local-Ticket-shop ===");
         System.out.println(
-                "Type 'help' to see available commands or 'exit' to quit.\n"
+            "Type 'help' to see available commands or 'exit' to quit.\n"
         );
 
         while (true) {
@@ -88,4 +87,5 @@ public class ConsoleClientTcp {
         System.out.println("  help          - Show this help message");
         System.out.println("  exit, quit, q - Exit the application");
     }
+
 }

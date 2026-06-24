@@ -9,7 +9,7 @@ import core.models.exceptions.CustomerException;
 import core.models.Customer;
 import core.services.CustomerService;
 import core.services.TicketService;
-import idGenerator.idService.IDService;
+import idgenerator.idservice.IDService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

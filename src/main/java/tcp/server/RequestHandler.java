@@ -8,8 +8,8 @@ import core.models.Event;
 import core.services.CustomerService;
 import core.services.EventService;
 import core.services.TicketService;
-import idGenerator.idService.IDService;
-import tcp.client.ticketShop.TicketShopStringFormatter;
+import idgenerator.idservice.IDService;
+import tcp.client.ticketshop.TicketShopStringFormatter;
 
 public class RequestHandler {
 

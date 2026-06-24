@@ -1,8 +1,8 @@
 package rest;
 
-import rest.server.createRecords.CreateCustomerRequest;
-import rest.server.createRecords.CreateEventRequest;
-import rest.server.createRecords.CreateTicketRequest;
+import rest.server.createrecords.CreateCustomerRequest;
+import rest.server.createrecords.CreateEventRequest;
+import rest.server.createrecords.CreateTicketRequest;
 import rest.server.WebTicketShopService;
 import tools.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;

@@ -1,31 +1,30 @@
-package rest.client;
+package tcp.client.ticketshop;
 
-import java.net.http.HttpClient;
+import core.interfaces.TicketShopInterface;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
-
-import core.models.exceptions.TicketException;
-import core.interfaces.TicketShopInterface;
+import java.util.*;
 import core.models.Customer;
 import core.models.Event;
 import core.models.Ticket;
-import rest.client.commandhandler.CommunicationHandler;
-import rest.client.commandhandler.RestTicketShopCustomerHandler;
-import rest.client.commandhandler.RestTicketShopEventHandler;
-import rest.client.commandhandler.RestTicketShopTicketHandler;
+import tcp.client.ticketshop.commandhandler.TCPTicketShopCustomerHandler;
+import tcp.client.ticketshop.commandhandler.TCPTicketShopEventHandler;
+import tcp.client.ticketshop.commandhandler.TCPTicketShopTicketHandler;
+import tcp.client.TcpClient;
 
-public class RestTicketShop implements TicketShopInterface {
-    private final RestTicketShopEventHandler eventHandler;
-    private final RestTicketShopTicketHandler ticketHandler;
-    private  final RestTicketShopCustomerHandler customerHandler;
+public class TCPTicketShop implements TicketShopInterface {
 
-    public RestTicketShop(HttpClient httpClient, String baseUrl) {
-        CommunicationHandler communicationHandler = new CommunicationHandler(httpClient);
-        this.eventHandler = new RestTicketShopEventHandler(communicationHandler, baseUrl);
-        this.customerHandler = new RestTicketShopCustomerHandler(communicationHandler, baseUrl);
-        this.ticketHandler = new RestTicketShopTicketHandler(communicationHandler, baseUrl);
+    private final TCPTicketShopEventHandler eventHandler;
+    private final TCPTicketShopCustomerHandler customerHandler;
+    private final TCPTicketShopTicketHandler ticketHandler;
+
+    public TCPTicketShop(TcpClient tcpClient) {
+        eventHandler = new TCPTicketShopEventHandler(tcpClient);
+        customerHandler = new TCPTicketShopCustomerHandler(tcpClient);
+        ticketHandler = new TCPTicketShopTicketHandler(tcpClient);
     }
+
+    // --- Event operations ---
 
     @Override
     public List<Event> getAllEvents() {
@@ -33,7 +32,12 @@ public class RestTicketShop implements TicketShopInterface {
     }
 
     @Override
-    public Event createEvent(String name, String location, LocalDateTime time, int ticketsAvailable) {
+    public Event createEvent(
+        String name,
+        String location,
+        LocalDateTime time,
+        int ticketsAvailable
+    ) {
         return eventHandler.createEvent(name, location, time, ticketsAvailable);
     }
 
@@ -57,13 +61,19 @@ public class RestTicketShop implements TicketShopInterface {
         eventHandler.deleteAllEvents();
     }
 
+    // --- Customer operations ---
+
     @Override
     public List<Customer> getAllCustomers() {
         return customerHandler.getAllCustomers();
     }
 
     @Override
-    public Customer createCustomer(String username, String email, LocalDate dateOfBirth) {
+    public Customer createCustomer(
+        String username,
+        String email,
+        LocalDate dateOfBirth
+    ) {
         return customerHandler.createCustomer(username, email, dateOfBirth);
     }
 
@@ -87,13 +97,15 @@ public class RestTicketShop implements TicketShopInterface {
         customerHandler.deleteAllCustomers();
     }
 
+    // --- Ticket operations ---
+
     @Override
     public List<Ticket> getAllTickets() {
         return ticketHandler.getAllTickets();
     }
 
     @Override
-    public Ticket createTicket(long customerId, long eventId) throws TicketException {
+    public Ticket createTicket(long customerId, long eventId) {
         return ticketHandler.createTicket(customerId, eventId);
     }
 

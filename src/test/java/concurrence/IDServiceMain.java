@@ -1,7 +1,7 @@
 package concurrence;
 
-import idGenerator.idService.IDService;
-import idGenerator.idService.IDServiceParallel;
+import idgenerator.idservice.IDService;
+import idgenerator.idservice.IDServiceParallel;
 
 public class IDServiceMain {
     public static void main(String[] args){
